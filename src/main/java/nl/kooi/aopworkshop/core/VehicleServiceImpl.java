@@ -7,28 +7,33 @@ import nl.kooi.aopworkshop.core.model.Vehicle;
 import nl.kooi.aopworkshop.core.port.VehicleRepository;
 import nl.kooi.aopworkshop.core.port.VehicleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public Set<Vehicle> getVehiclesOwnedBy(Long ownerId) {
         return repository.getVehiclesOwnedBy(ownerId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<String> getLicensePlatesForOwner(Long ownerId) {
         return repository.getLicensePlatesForOwner(ownerId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Vehicle getVehicleWithLicensePlate(String licensePlate) {
         return repository.getVehicleWithLicensePlate(licensePlate)
                 .orElseThrow(NotFoundException::new);
