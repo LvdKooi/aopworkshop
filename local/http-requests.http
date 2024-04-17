@@ -28,7 +28,6 @@ Host: localhost:8080
 x-user-id: 12345
 Content-Type: application/json
 
-
 ### get vehicle by license plate
 GET /vehicles/AB-VZ-95 HTTP/1.1
 Host: localhost:8080
