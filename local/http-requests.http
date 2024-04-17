@@ -1,0 +1,36 @@
+### save a vehicle
+POST /vehicles HTTP/1.1
+Host: localhost:8080
+x-user-id: 12345
+Content-Type: application/json
+
+{
+  "licensePlate": "AB-VZ-95",
+  "brand": "VW",
+  "model": "Golf"
+}
+
+### update a vehicle
+PUT /vehicles/AB-VZ-95 HTTP/1.1
+Host: localhost:8080
+x-user-id: 12345
+Content-Type: application/json
+
+{
+  "licensePlate": "AB-VZ-95",
+  "brand": "VW",
+  "model": "Passat"
+}
+
+### get vehicle of logged in user
+GET /vehicles HTTP/1.1
+Host: localhost:8080
+x-user-id: 12345
+Content-Type: application/json
+
+
+### get vehicle by license plate
+GET /vehicles/AB-VZ-95 HTTP/1.1
+Host: localhost:8080
+x-user-id: 12345
+Content-Type: application/json
