@@ -1,6 +1,7 @@
 package nl.kooi.aopworkshop.api;
 
 import lombok.RequiredArgsConstructor;
+import nl.kooi.aopworkshop.api.aspect.UserIsAuthorized;
 import nl.kooi.aopworkshop.api.dto.VehicleDTO;
 import nl.kooi.aopworkshop.api.mapper.VehicleMapper;
 import nl.kooi.aopworkshop.core.port.VehicleService;
@@ -22,12 +23,14 @@ public class VehicleController {
     }
 
     @GetMapping("/{licensePlate}")
+    @UserIsAuthorized
     public VehicleDTO getVehicleByLicensePlate(@RequestHeader(name = "x-user-id") Long userId,
                                                @PathVariable("licensePlate") String licensePlate) {
         return VehicleMapper.mapToDTO(vehicleService.getVehicleWithLicensePlate(licensePlate));
     }
 
     @PutMapping("/{licensePlate}")
+    @UserIsAuthorized
     public VehicleDTO updateVehicle(@RequestHeader(name = "x-user-id") Long userId,
                                     @PathVariable("licensePlate") String licensePlate,
                                     @RequestBody VehicleDTO vehicleDTO) {
