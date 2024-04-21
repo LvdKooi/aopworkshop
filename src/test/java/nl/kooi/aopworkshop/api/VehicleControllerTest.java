@@ -4,7 +4,6 @@ import nl.kooi.aopworkshop.api.aspect.UserVersusVehicleAspect;
 import nl.kooi.aopworkshop.api.exception.UnauthorizedException;
 import nl.kooi.aopworkshop.core.model.Vehicle;
 import nl.kooi.aopworkshop.core.port.VehicleService;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
@@ -14,9 +13,11 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 
 @SpringJUnitConfig({VehicleController.class, UserVersusVehicleAspect.class})
@@ -40,13 +41,21 @@ class VehicleControllerTest {
 
         proxy = proxyFactory.getProxy();
     }
+
     @Test
-    void shouldBeOwnerOfVehicle_getByLicensePlate() {
+    void getByLicensePlate_shouldThrowUnauthorizedException_whenCallerIsNotOwnerOfVehicle() {
         when(service.getLicensePlatesForOwner(anyLong())).thenReturn(Set.of("CD"));
 
         assertThrows(UnauthorizedException.class, () -> proxy.getVehicleByLicensePlate(1L, "AB"));
+    }
 
-        verify(service, never()).saveVehicle(any(Vehicle.class));
+    @Test
+    void getByLicensePlate_shouldRunSuccessfully_whenCallerIsOwnerOfVehicle() {
+        when(service.getLicensePlatesForOwner(anyLong())).thenReturn(Set.of("AB"));
+        when(service.getVehicleWithLicensePlate(anyString()))
+                .thenReturn(new Vehicle(1L, "AB", "VW", "ID3"));
+
+        assertDoesNotThrow(() -> proxy.getVehicleByLicensePlate(1L, "AB"));
     }
 
 }

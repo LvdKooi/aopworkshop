@@ -21,10 +21,9 @@ public class UserVersusVehicleAspect {
     public void checkIfUserIsOwnerOfVehicle(Long userId, String licensePlate) {
         var licensePlates = vehicleService.getLicensePlatesForOwner(userId);
 
-        if(!licensePlates.contains(licensePlate)) {
-            log.info("user {} tried to access vehicle {}", userId, licensePlate);
+        if (!licensePlates.contains(licensePlate)) {
+            log.error("user {} tried to access vehicle {}", userId, licensePlate);
             throw new UnauthorizedException();
         }
     }
-
 }
