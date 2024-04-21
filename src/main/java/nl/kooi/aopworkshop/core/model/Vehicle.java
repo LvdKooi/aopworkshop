@@ -9,7 +9,7 @@ public record Vehicle(
         String model
 ) {
 
-    public Vehicle{
+    public Vehicle {
         Objects.requireNonNull(licensePlate, "LicensePlate should not be null");
         Objects.requireNonNull(brand, "Brand should not be null");
         Objects.requireNonNull(model, "Model should not be null");
